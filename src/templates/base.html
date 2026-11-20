@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}TaskFlow{% endblock %} · TaskFlow</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topo">
+    <a class="marca" href="{{ url_for('tarefas.quadro') }}">TaskFlow</a>
+    <nav>
+      {% if g.usuario %}
+        <a href="{{ url_for('tarefas.quadro') }}">Quadro</a>
+        <a href="{{ url_for('tarefas.painel') }}">Painel</a>
+        <a href="{{ url_for('tarefas.sobre') }}">Sobre</a>
+        <span class="usuario">{{ g.usuario['nome'] }}</span>
+        <form method="post" action="{{ url_for('auth.logout') }}" class="inline">
+          <button class="link" type="submit">Sair</button>
+        </form>
+      {% else %}
+        <a href="{{ url_for('tarefas.sobre') }}">Sobre</a>
+        <a href="{{ url_for('auth.login') }}">Entrar</a>
+        <a class="botao" href="{{ url_for('auth.cadastro') }}">Criar conta</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <main class="conteudo">
+    {% with mensagens = get_flashed_messages(with_categories=true) %}
+      {% if mensagens %}
+        <ul class="flash">
+          {% for categoria, mensagem in mensagens %}
+            <li class="{{ categoria }}">{{ mensagem }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    {% block conteudo %}{% endblock %}
+  </main>
+
+  <footer class="rodape">
+    TaskFlow · Projeto acadêmico de Engenharia de Software · Flask + PyTest + GitHub Actions
+  </footer>
+</body>
+</html>

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block titulo %}Sobre{% endblock %}
+
+{% block conteudo %}
+<section class="cartao">
+  <h1>Sobre o TaskFlow</h1>
+  <p>
+    O <strong>TaskFlow</strong> é um sistema web de gerenciamento de tarefas
+    desenvolvido como projeto da disciplina de Engenharia de Software. Ele foi
+    pensado para o cenário da <strong>TechFlow Solutions</strong>, contratada por
+    uma startup de logística para acompanhar o fluxo de trabalho em tempo real,
+    priorizar tarefas críticas e monitorar o desempenho da equipe.
+  </p>
+
+  <h2>Escopo</h2>
+  <ul>
+    <li>Cadastro e autenticação de usuários (senha armazenada com hash).</li>
+    <li>CRUD completo de tarefas: criar, listar, editar, mover no quadro e excluir.</li>
+    <li>Quadro Kanban com as colunas <strong>A Fazer</strong> (<em>To Do</em>),
+        <strong>Em Progresso</strong> (<em>In Progress</em>) e
+        <strong>Concluído</strong> (<em>Done</em>).</li>
+    <li>Prioridade (baixa, média, alta, crítica) e prazo por tarefa.</li>
+    <li>Painel de métricas: taxa de conclusão, tarefas em atraso e throughput semanal.</li>
+    <li>Isolamento de dados: cada usuário vê apenas as próprias tarefas.</li>
+  </ul>
+
+  <h2>Metodologia</h2>
+  <p>
+    Adotamos um modelo <strong>híbrido</strong>: o <strong>Scrum</strong> define
+    as cerimônias e o ritmo de entregas em sprints de uma semana, enquanto o
+    <strong>Kanban</strong> controla o fluxo contínuo das tarefas no GitHub
+    Projects (limite de trabalho em progresso e visualização do gargalo).
+    Cada card do quadro corresponde a um commit ou a um pequeno conjunto de
+    commits semânticos.
+  </p>
+
+  <h2>Qualidade</h2>
+  <p>
+    Os testes automatizados (PyTest) cobrem validação de entradas, autenticação,
+    CRUD e métricas. O pipeline do GitHub Actions roda a suíte de testes e a
+    análise estática (<code>ruff</code>) a cada <code>push</code> e
+    <code>pull request</code>, bloqueando a integração quando algo falha.
+  </p>
+
+  <p class="apoio">
+    Status do domínio: {{ status_validos|join(", ") }} ·
+    Prioridades: {{ prioridades_validas|join(", ") }}
+  </p>
+</section>
+{% endblock %}
