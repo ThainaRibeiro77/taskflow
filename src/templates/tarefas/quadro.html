@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block titulo %}Quadro{% endblock %}
+
+{% block conteudo %}
+<div class="cabecalho-pagina">
+  <div>
+    <h1>Quadro de tarefas</h1>
+    <p class="apoio">
+      {{ total }} tarefa(s) no total · colunas espelhando o GitHub Projects
+      (<em>To Do</em> / <em>In Progress</em> / <em>Done</em>)
+    </p>
+  </div>
+  <a class="botao" href="{{ url_for('tarefas.nova_tarefa') }}">+ Nova tarefa</a>
+</div>
+
+<div class="quadro">
+  {% for coluna in colunas %}
+    <section class="coluna coluna-{{ coluna.status }}">
+      <h2>{{ coluna.rotulo }} <span class="contador">{{ coluna.tarefas|length }}</span></h2>
+
+      {% for tarefa in coluna.tarefas %}
+        <article class="tarefa prioridade-{{ tarefa['prioridade'] }}">
+          <h3>{{ tarefa['titulo'] }}</h3>
+          {% if tarefa['descricao'] %}
+            <p class="descricao">{{ tarefa['descricao'] }}</p>
+          {% endif %}
+          <p class="meta">
+            <span class="etiqueta">{{ prioridades[tarefa['prioridade']] }}</span>
+            {% if tarefa['prazo'] %}<span class="prazo">Prazo: {{ tarefa['prazo'] }}</span>{% endif %}
+          </p>
+
+          <div class="acoes">
+            {% if tarefa['status'] != 'a_fazer' %}
+              <form method="post" action="{{ url_for('tarefas.mover_tarefa', tarefa_id=tarefa['id']) }}">
+                <input type="hidden" name="status" value="a_fazer">
+                <button class="mini" type="submit">← A Fazer</button>
+              </form>
+            {% endif %}
+            {% if tarefa['status'] != 'em_progresso' %}
+              <form method="post" action="{{ url_for('tarefas.mover_tarefa', tarefa_id=tarefa['id']) }}">
+                <input type="hidden" name="status" value="em_progresso">
+                <button class="mini" type="submit">Em Progresso</button>
+              </form>
+            {% endif %}
+            {% if tarefa['status'] != 'concluido' %}
+              <form method="post" action="{{ url_for('tarefas.mover_tarefa', tarefa_id=tarefa['id']) }}">
+                <input type="hidden" name="status" value="concluido">
+                <button class="mini" type="submit">Concluir ✓</button>
+              </form>
+            {% endif %}
+            <a class="mini" href="{{ url_for('tarefas.editar_tarefa', tarefa_id=tarefa['id']) }}">Editar</a>
+            <form method="post" action="{{ url_for('tarefas.excluir_tarefa', tarefa_id=tarefa['id']) }}"
+                  onsubmit="return confirm('Excluir esta tarefa?');">
+              <button class="mini perigo" type="submit">Excluir</button>
+            </form>
+          </div>
+        </article>
+      {% else %}
+        <p class="vazio">Nenhuma tarefa nesta coluna.</p>
+      {% endfor %}
+    </section>
+  {% endfor %}
+</div>
+{% endblock %}
