@@ -128,7 +128,7 @@ Pré-requisitos: Python 3.10 ou superior e Git.
 
 ```bash
 # 1. Clone o repositório
-git clone https://github.com/SEU-USUARIO/taskflow.git
+git clone https://github.com/ThainaRibeiro77/taskflow.git
 cd taskflow
 
 # 2. Crie e ative um ambiente virtual
@@ -183,6 +183,14 @@ Python 3.12:
 
 Se qualquer etapa falhar, o merge é bloqueado pela regra de proteção da branch
 `main` (*Require status checks to pass before merging*).
+
+## Kanban (GitHub Projects)
+
+O quadro do projeto está no GitHub Projects.
+
+## Histórico de commits
+
+O plano de commits semânticos está em [`docs/commits.md`](docs/commits.md).
 
 
 ## Mudança de escopo

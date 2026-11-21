@@ -60,3 +60,25 @@ def test_sobre_e_publica(client):
     resposta = client.get("/sobre")
     assert resposta.status_code == 200
     assert b"TaskFlow" in resposta.data
+
+def test_login_nao_redireciona_para_site_externo(client):
+    cadastrar(client)
+    for destino in ("//example.org", "/\\example.org", "https://example.org"):
+        resposta = client.post(
+            "/login",
+            query_string={"proximo": destino},
+            data={"email": "ana@exemplo.com", "senha": "senha1234"},
+        )
+        assert resposta.status_code == 302
+        assert "example.org" not in resposta.headers["Location"]
+        client.post("/logout")
+
+
+def test_login_aceita_destino_interno(client):
+    cadastrar(client)
+    resposta = client.post(
+        "/login",
+        query_string={"proximo": "/painel"},
+        data={"email": "ana@exemplo.com", "senha": "senha1234"},
+    )
+    assert resposta.headers["Location"].endswith("/painel")
