@@ -49,6 +49,13 @@ def login_obrigatorio(view):
 
     return wrapper
 
+def _caminho_interno(destino: str) -> bool:
+    """True só para caminhos do próprio site (rejeita `//host` e `/\\host`)."""
+    return (
+        destino.startswith("/")
+        and not destino.startswith("//")
+        and "\\" not in destino
+    )
 
 @bp.before_app_request
 def preparar_sessao() -> None:
@@ -91,7 +98,7 @@ def login():
             flash(f"Bem-vindo(a), {usuario['nome']}!", "sucesso")
             proximo = request.args.get("proximo") or url_for("tarefas.quadro")
             # Evita redirecionamento aberto: só aceitamos caminhos internos.
-            if not proximo.startswith("/"):
+            if not _caminho_interno(proximo):
                 proximo = url_for("tarefas.quadro")
             return redirect(proximo)
 
